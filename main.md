@@ -1,9 +1,7 @@
----
-title: "COVID-19 Deaths"
-output: rmarkdown::github_document
----
+COVID-19 Deaths
+================
 
-```{r message=FALSE}
+``` r
 library(tidyverse)
 library(glue)
 library(ggrepel)
@@ -11,7 +9,7 @@ library(ggrepel)
 
 ### Cumulative Deaths by State
 
-```{r message=FALSE}
+``` r
 api <- "https://covidtracking.com/api/"
 
 # Read in daily state-level data
@@ -37,9 +35,11 @@ ggplot(death10, aes(x = since, y = death, colour = state)) +
   ylab("Deaths (cumulative)")
 ```
 
+![](main_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
 ### Death Rate by State
 
-```{r message=FALSE}
+``` r
 # Get table of state names & abbreviations
 abbrevUrl <- "https://worldpopulationreview.com/static/states/abbr-name.csv"
 abbrev <- read_csv(abbrevUrl, col_names = c("abbrev", "name"))
@@ -65,3 +65,5 @@ ggplot(death10pop, aes(x = since, y = rate, colour = state)) +
   xlab("Days since 10th death") +
   ylab("Death rate")
 ```
+
+![](main_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
