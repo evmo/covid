@@ -1,12 +1,14 @@
 ---
 title: "COVID-19 Deaths"
-output: rmarkdown::github_document
+output: 
+  github_document:
+    toc: true
 ---
 
 ```{r message=FALSE}
-library(tidyverse)
-library(glue)
-library(ggrepel)
+library(readr)
+library(dplyr)
+library(ggplot2)
 ```
 
 ### Cumulative Deaths by State
@@ -15,7 +17,7 @@ library(ggrepel)
 api <- "https://covidtracking.com/api/"
 
 # Read in daily state-level data
-states <- read_csv(glue(api, "states/daily.csv")) %>%
+states <- read_csv(glue::glue(api, "states/daily.csv")) %>%
   mutate(date = as.Date(as.character(date), format = "%Y%m%d"))
 
 # Calculate days since 10th death for each state
@@ -28,7 +30,7 @@ death10 <- states %>%
 
 ggplot(death10, aes(x = since, y = death, colour = state)) +
   geom_line() +
-  geom_text_repel(
+  ggrepel::geom_text_repel(
     data = filter(death10, date == max(date), since > 2),
     aes(label = state, color = state), 
     nudge_x = 0.5) +
@@ -57,11 +59,14 @@ death10pop <- death10 %>%
 
 ggplot(death10pop, aes(x = since, y = rate, colour = state)) +
   geom_line() +
-  geom_text_repel(
-    data = filter(death10pop, date == max(date), since > 2),
+  ggrepel::geom_text_repel(
+    data = filter(death10pop, date == max(date)),
     aes(label = state, color = state), 
     nudge_x = 0.5) +
   theme(legend.position = "none") +
   xlab("Days since 10th death") +
-  ylab("Death rate")
+  ylab("Deaths / population") +
+  scale_y_log10()
 ```
+
+### 
